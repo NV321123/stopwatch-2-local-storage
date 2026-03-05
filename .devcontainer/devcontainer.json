@@ -1,0 +1,21 @@
+{
+  "name": "React + Vite Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "forwardPorts": [5173],
+  "postCreateCommand": "npm install",
+  "remoteUser": "node",
+  "updateRemoteUserUID": true
+}
