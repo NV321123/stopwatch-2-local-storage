@@ -1,0 +1,62 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background-color 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  filter: brightness(0.95);
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: none;
+  filter: brightness(0.9);
+}
+
+.start {
+  background-color: var(--pastel-green);
+  color: var(--pastel-green-dark);
+}
+
+.pause {
+  background-color: var(--pastel-blue);
+  color: var(--pastel-blue-dark);
+}
+
+.clear {
+  background-color: var(--pastel-pink);
+  color: var(--pastel-pink-dark);
+}
+
+.delete {
+  background-color: transparent;
+  color: var(--pastel-red-dark);
+  padding: 0.4rem;
+}
+
+.delete:hover {
+  background-color: var(--pastel-red);
+}
+
+.add {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 2px dashed var(--pastel-green-dark);
+  background-color: var(--pastel-green);
+  color: var(--pastel-green-dark);
+  margin-bottom: 2rem;
+}
