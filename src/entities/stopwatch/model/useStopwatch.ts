@@ -112,9 +112,6 @@
 //   };
 // };
 
-
-
-
 import { useState, useEffect, useRef, useCallback, useMemo, startTransition } from "react";
 import { StopwatchStatus } from "./types";
 
@@ -167,22 +164,23 @@ export const useStopwatch = (id: number) => {
     if (savedState) {
       const { status: savedStatus, accumulated: savedAccumulated, startTime: savedStartTime } = savedState;
       
+      accumulatedTimeRef.current = savedAccumulated;
+      timeRef.current = savedAccumulated;
+      
       if (savedStatus === StopwatchStatus.RUNNING) {
         const now = Date.now();
         const elapsedWhileClosed = now - savedStartTime;
         
-        accumulatedTimeRef.current = savedAccumulated + elapsedWhileClosed;
-        startTimeRef.current = now; 
+        accumulatedTimeRef.current += elapsedWhileClosed;
         timeRef.current = accumulatedTimeRef.current;
+
+        startTimeRef.current = now;
+
         
         startTransition(() => {
           setStatus(StopwatchStatus.RUNNING);
         });
       } else {
-        accumulatedTimeRef.current = savedAccumulated;
-        startTimeRef.current = 0;
-        timeRef.current = savedAccumulated;
-        
         startTransition(() => {
           setStatus(savedStatus);
         });
@@ -194,6 +192,7 @@ export const useStopwatch = (id: number) => {
 
   useEffect(() => {
     if (status === StopwatchStatus.RUNNING) {
+
       intervalRef.current = setInterval(() => {
         const now = Date.now();
         const delta = now - startTimeRef.current;
@@ -221,27 +220,14 @@ export const useStopwatch = (id: number) => {
   }, [id]);
 
   const start = useCallback(() => {
-    if (status === StopwatchStatus.IDLE) {
-      timeRef.current = 0;
-      accumulatedTimeRef.current = 0;
-    }
-    
-    if (status !== StopwatchStatus.RUNNING) {
-      startTimeRef.current = Date.now();
-      startTransition(() => setStatus(StopwatchStatus.RUNNING));
-      persist(StopwatchStatus.RUNNING);
-    }
-  }, [status, persist]);
+    startTimeRef.current = Date.now(); 
+    startTransition(() => setStatus(StopwatchStatus.RUNNING));
+    persist(StopwatchStatus.RUNNING);
+  }, [persist]);
 
   const pause = useCallback(() => {
     if (status === StopwatchStatus.RUNNING) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-
       accumulatedTimeRef.current += Date.now() - startTimeRef.current;
-      startTimeRef.current = 0;
       
       startTransition(() => setStatus(StopwatchStatus.PAUSED));
       persist(StopwatchStatus.PAUSED);
@@ -249,24 +235,17 @@ export const useStopwatch = (id: number) => {
   }, [status, persist]);
 
   const resume = useCallback(() => {
-    if (status === StopwatchStatus.PAUSED) {
-      startTimeRef.current = Date.now();
-      startTransition(() => setStatus(StopwatchStatus.RUNNING));
-      persist(StopwatchStatus.RUNNING);
-    }
-  }, [status, persist]);
+    startTimeRef.current = Date.now();
+
+    startTransition(() => setStatus(StopwatchStatus.RUNNING));
+    persist(StopwatchStatus.RUNNING);
+  }, [persist]);
 
   const clear = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-
+    setStatus(StopwatchStatus.IDLE);
     timeRef.current = 0;
     accumulatedTimeRef.current = 0;
-    startTimeRef.current = 0;
-
-    startTransition(() => setStatus(StopwatchStatus.IDLE));
+    
     persist(StopwatchStatus.IDLE);
   }, [persist]);
 
