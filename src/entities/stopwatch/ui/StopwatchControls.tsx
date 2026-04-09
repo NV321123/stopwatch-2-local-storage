@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from '@/shared/ui/Button/Button';
 import { ButtonVariant } from '@/shared/ui/Button/Button.types';
-import { IconPlay, IconPause } from "@/shared/ui/Icon/icons";
+import { IconPlay, IconPause, IconSparkles } from "@/shared/ui/Icon/icons";
 import { StopwatchStatus } from "../model/types";
 
 interface StopwatchControlsProps {
@@ -9,6 +9,10 @@ interface StopwatchControlsProps {
   onStart: () => void;
   onPause: () => void;
   onResume: () => void;
+}
+
+interface StopwatchClearButtonProps {
+  onClear: () => void;
 }
 
 export const StopwatchControls: React.FC<StopwatchControlsProps> = React.memo(({
@@ -42,5 +46,15 @@ export const StopwatchControls: React.FC<StopwatchControlsProps> = React.memo(({
         </>
       )}
     </>
+  );
+});
+
+export const StopwatchClearButton: React.FC<StopwatchClearButtonProps> = React.memo(({ onClear }) => {
+  console.log('Clear Button');
+
+  return (
+    <Button variant={ButtonVariant.CLEAR} onClick={onClear} ariaLabel="Clear">
+      <IconSparkles /> Clear
+    </Button>
   );
 });
